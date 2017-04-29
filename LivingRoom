@@ -1,0 +1,37 @@
+from gpio import *
+from time import *
+
+
+pinMode(0, IN)
+pinMode(1, OUT)
+pinMode(2, IN)
+pinMode(3, OUT)
+pinMode(4, OUT)
+pinMode(A0, IN)
+pinMode(A1, IN)
+pinMode(A2, OUT)
+print("Welcome to my home")
+temperatureC = 0
+while True:
+	tempReading = digitalRead(A0)
+	subtemperatureC = (200*tempReading)/1023
+	if subtemperatureC < 100:
+		temperatureC = 0 - (100 - subtemperatureC)
+	if subtemperatureC == 100: 
+		temperatureC = 0
+	if subtemperatureC > 100:
+		temperatureC = subtemperatureC - 100
+	print('Temperature C Degree: ') + str (temperatureC) + str ('*C')
+	humReading = digitalRead(A1)
+	hum = (humReading * 100) / 1023
+	print('Humidity: ') + str (hum) + str ('%')
+	
+	if digitalRead (2, HIGH):
+		if digitalRead (0, HIGH):
+			digitalWrite (1, HIGH)
+		else:
+			digitalWrite (1, LOW)
+	
+	customWrite(3, "Humidity: " + str (hum) + str("%"))
+	customWrite(4, "Temp C: " + str(temperatureC) + str("*C"))
+	delay(500)
